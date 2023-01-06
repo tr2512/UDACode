@@ -30,13 +30,11 @@ class GTA5(torch.utils.data.Dataset):
         lbl = np.array(Image.open(os.path.join(lbl_dir), dtype=np.int_))
         lbl = self.encode_segmap(lbl)
         data = {}
+        if self.augmentations:
+            img, lbl = self.augmentations(img, lbl)
         data['img'] = img
         data['lbl'] = lbl
         data['dir'] = img_dir
-        if self.augmentations:
-            img, lbl = self.augmentations(img, lbl)
-            data["img"] = img
-            data["lbl"] = lbl 
         if self.randaug:
             imgS, lblS = self.randaug(img, lbl)
             data["imgS"] = imgS
